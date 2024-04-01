@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Galuh Ayu's Wishlist">
+    <meta property="og:description" content="Galuh Ayu's Bucket List">
+    <meta property="og:image" content="URL_TO_IMAGE">
+    <meta property="og:url" content="URL_TO_PAGE">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -15,7 +19,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 
-    <title>Bucket List</title>
+    <title>Galuh Ayu's Wishlist</title>
 
     <style>
         * {
@@ -26,7 +30,8 @@
             width: 100%;
             height: 200px;
 
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1601024445121-e5b82f020549?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80');
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('https://images.unsplash.com/photo-1601024445121-e5b82f020549?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80');
             background-position: center;
             background-size: cover;
 
@@ -65,28 +70,45 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
 
             margin-bottom: 10px;
             min-height: 48px;
         }
 
         .mybox>li>h2 {
-            max-width: 75%;
+            max-width: 60%;
             font-size: 20px;
             font-weight: 500;
-            margin-right: auto;
             margin-bottom: 0px;
         }
 
         .mybox>li>h2.done {
-            text-decoration: line-through
+            text-decoration: line-through;
+            color: black;
+            /* Warna teks menjadi hitam setelah dicoret */
+        }
+
+        .mybox>li>button {
+            padding: 5px 10px;
+            /* Menambahkan padding pada tombol */
+        }
+
+        .mybox>li>button:last-child {
+            margin-left: 5px;
+            /* Mengurangi jarak kiri agar sesuai dengan tombol "Done" */
+        }
+
+        .buttons {
+            display: flex;
+            gap: 5px;
         }
     </style>
     <script>
         $(document).ready(function () {
             show_bucket();
         });
+
         function show_bucket() {
             $('#bucket-list').empty();
             $.ajax({
@@ -102,24 +124,30 @@
                         let temp_html = '';
                         if (done === 0) {
                             temp_html = `
-    <li>
-    <h2>✅ ${bucket}</h2>
-    <button onclick="deleteBucket(${num})" type="button" class="btn btn-outline-danger">Delete</button>
-    </li>
-
+                                <li>
+                                    <h2>✅ ${bucket}</h2>
+                                    <div class="buttons">
+                                        <button onclick="markAsDone(${num})" type="button" class="btn btn-outline-success">Done</button>
+                                        <button onclick="deleteBucket(${num})" type="button" class="btn btn-outline-danger">Delete</button>
+                                    </div>
+                                </li>
                             `;
                         } else {
                             temp_html = `
-        <li>
-            <h2 class="done">✅ ${bucket}</h2>
-        </li>
-                         `;
+                                <li>
+                                    <h2 class="done">✅ ${bucket}</h2>
+                                    <div class="buttons">
+                                        <button onclick="deleteBucket(${num})" type="button" class="btn btn-outline-danger">Delete</button>
+                                    </div>
+                                </li>
+                            `;
                         }
                         $('#bucket-list').append(temp_html);
                     }
                 }
             });
         }
+
         function save_bucket() {
             let bucket = $('#bucket').val();
             $.ajax({
@@ -132,17 +160,18 @@
                 }
             });
         }
-        function done_bucket(num) {
+
+        function markAsDone(num) {
             $.ajax({
                 type: "POST",
                 url: "/bucket/done",
-                data: { sameple_give: 'data' },
+                data: { num: num },
                 success: function (response) {
-                    alert(response["msg"])
+                    alert("Update Done"); // Tampilkan popup "Update Done" ketika item ditandai sebagai selesai
+                    show_bucket(); // Perbarui tampilan daftar setelah item ditandai sebagai "Done"
                 }
             });
         }
-
 
         function deleteBucket(num) {
             $.ajax({
@@ -155,7 +184,6 @@
                 }
             });
         }
-        f
     </script>
 </head>
 
