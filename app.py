@@ -4,7 +4,7 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://test:test123@cluster0.tlly1pu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 db = client.dbsparta
 
-app = Flask(__name__)
+app = Flask(__name__) 
 
 @app.route('/')
 def home():
